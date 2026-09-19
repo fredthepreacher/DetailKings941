@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Detail Kings 941 — Website
 
-## Getting Started
+Next.js (App Router) + TypeScript + Tailwind v4 project for the Detail Kings
+941 website. Built by Claude for Wavy Sites as Phase 1 (homepage vertical
+slice + IA + SEO/AEO foundation + quote flow UI).
 
-First, run the development server:
+## Running locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # http://localhost:3000
+npm run build     # production build
+npm run start     # serve the production build
+npm run lint       # eslint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚠️ Before this goes live, read `ASSET_AUDIT_REPORT.md` (project root, one level up)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Two things are still open and are flagged throughout the code:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **No real photos, video, or logo exist yet.** Every image on the site is
+   a designed placeholder (see `src/components/media/PlaceholderMedia.tsx`).
+   Drop real files into `/public/images/...` and update the matching entry
+   in `src/data/media.ts` (`status: "real"`, real `src`/`width`/`height`) —
+   no component code needs to change.
+2. **The business address is unresolved.** `src/data/business.ts` documents
+   a conflict between a Port Charlotte address (from the client handoff) and
+   a Facebook page titled "North Port FL". Do not publish a street address
+   until this is confirmed — fill in `business.location.confirmed` once it
+   is.
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+- `src/data/` — all content: business NAP, services (draft, `verified:
+  false` until confirmed), FAQ, differentiators, reviews (empty — none
+  verified yet), media registry.
+- `src/components/home/` — homepage sections, in the order they render.
+- `src/components/layout/` — header, footer, mobile sticky action bar.
+- `src/components/forms/QuoteFlow.tsx` — the 5-step quote UI. `handleSubmit`
+  is a stub (no backend wired up yet, per instruction not to connect
+  third-party services without sign-off) — wire it to a real endpoint/CRM
+  when ready.
+- `src/lib/schema.ts` — JSON-LD (LocalBusiness/AutomotiveBusiness, WebSite,
+  FAQPage, BreadcrumbList). Address/aggregateRating are omitted until the
+  location and review data above are confirmed real.
+- `src/app/` — routes: `/`, `/services`, `/services/[slug]`, `/gallery`,
+  `/about`, `/reviews`, `/faq`, `/contact`, plus `robots.ts`/`sitemap.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design system
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tokens live in `src/app/globals.css` (`@theme`) — ink/steel/ember/tide color
+scale, Oswald (display) + Manrope (body) via self-hosted `@fontsource`
+packages (no external font requests). Everything under a `DRAFT` comment in
+that file is provisional and should be revisited once a real logo exists.
 
-## Deploy on Vercel
+## Not yet built (next phase, per the production brief)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Real photography/video integration
+- `/service-areas/*` location pages (intentionally not built yet — spec
+  says don't generate location pages before the location is confirmed)
+- Backend wiring for the quote form (CRM/email/API)
+- Full content authority pages (Florida car-care guides, section 22)
