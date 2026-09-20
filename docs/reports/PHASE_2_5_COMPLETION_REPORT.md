@@ -161,7 +161,8 @@ storefront before promotion to `main`.**
 
 ## GIT
 
-New checkpoint on `claude-dev`: commit `__SHA__` (see chat). `main` untouched at Phase 1.
+New checkpoint on `claude-dev`: commit `8982bdd` (on top of `6669180` Phase 2 + CI,
+and `f52dde7` Phase 2). `main` untouched at Phase 1 (`30a9bc1`).
 
 ## VERCEL
 
