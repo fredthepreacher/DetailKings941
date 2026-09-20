@@ -114,7 +114,19 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3 text-sm text-steel-300">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-lime-500" />
-                Serving Southwest Florida / the 941 area
+                {business.location.confirmed ? (
+                  <span>
+                    {business.location.confirmed.street}
+                    <br />
+                    {business.location.confirmed.city},{" "}
+                    {business.location.confirmed.state}{" "}
+                    {business.location.confirmed.zip}
+                    <br />
+                    <span className="text-steel-500">Serving the 941 area</span>
+                  </span>
+                ) : (
+                  "Serving Southwest Florida / the 941 area"
+                )}
               </li>
             </ul>
           </div>

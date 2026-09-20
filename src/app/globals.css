@@ -157,3 +157,78 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+/* ==========================================================================
+   PHASE 2.5 — Editorial / automotive graphic vocabulary.
+   Restrained: chrome + lime lines, corner metadata labels, film grain over
+   footage. No racing flags, flames, or car silhouettes.
+   ========================================================================== */
+
+/* Fine film grain to sit over video/photo so footage reads as "graded",
+   not raw phone capture. Applied as an ::after or standalone overlay. */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* Uppercase editorial micro-label with a leading lime tick. */
+.edge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-steel-300);
+}
+.edge-label::before {
+  content: "";
+  width: 1.75rem;
+  height: 2px;
+  background: var(--color-lime-500);
+}
+
+/* Thin chrome hairline for section separations. */
+.rule-chrome {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-steel-600) 20%,
+    var(--color-steel-300) 50%,
+    var(--color-steel-600) 80%,
+    transparent 100%
+  );
+}
+
+/* Oversized outlined "ghost" numeral / word for editorial layering. */
+.ghost-type {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-steel-700);
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+/* Controlled lime glow behind a focal element. */
+.lime-glow {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-lime-500) 40%, transparent),
+    0 18px 60px -20px color-mix(in srgb, var(--color-lime-500) 55%, transparent);
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

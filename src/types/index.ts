@@ -16,6 +16,23 @@ export type MediaAsset = {
   credit?: string;
 };
 
+export type VideoAsset = {
+  /** Stable id, e.g. "hero-foam-wash" */
+  id: string;
+  /** Primary/desktop H.264 MP4 path */
+  src: string;
+  /** Lighter mobile MP4 path, when a separate derivative exists */
+  srcMobile?: string;
+  /** WebP/AVIF poster frame — also the reduced-motion still */
+  poster: string;
+  /** Descriptive label used for aria + captioning */
+  alt: string;
+  /** Intrinsic pixel dimensions of the encoded derivative */
+  width: number;
+  height: number;
+  status: "placeholder" | "real";
+};
+
 export type BeforeAfterPair = {
   id: string;
   title: string;

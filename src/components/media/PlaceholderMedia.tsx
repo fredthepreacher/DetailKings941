@@ -23,11 +23,27 @@ export function PlaceholderMedia({
   fill?: boolean;
 }) {
   if (asset.status === "real" && asset.src) {
+    // Intrinsic mode (fill=false): the image sizes itself from its natural
+    // aspect ratio — used for masonry/editorial layouts where the tile height
+    // should follow the photo rather than a fixed container.
+    if (!fill) {
+      return (
+        <Image
+          src={asset.src}
+          alt={asset.alt}
+          width={asset.width}
+          height={asset.height}
+          sizes={sizes}
+          priority={priority}
+          className={cn("h-auto w-full", className)}
+        />
+      );
+    }
     return (
       <Image
         src={asset.src}
         alt={asset.alt}
-        fill={fill}
+        fill
         sizes={sizes}
         priority={priority}
         className={cn("object-cover", className)}
@@ -38,7 +54,8 @@ export function PlaceholderMedia({
   return (
     <div
       className={cn(
-        "relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br from-ink-800 via-ink-900 to-ink-950",
+        "relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-ink-800 via-ink-900 to-ink-950",
+        fill ? "h-full w-full" : "aspect-[4/3] w-full",
         className,
       )}
       role="img"

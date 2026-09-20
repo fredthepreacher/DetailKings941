@@ -3,6 +3,7 @@ import { TrustStrip } from "@/components/home/TrustStrip";
 import { ServicesPreview } from "@/components/home/ServicesPreview";
 import { Transformation } from "@/components/home/Transformation";
 import { Differentiators } from "@/components/home/Differentiators";
+import { ResultsReel } from "@/components/home/ResultsReel";
 import { Gallery } from "@/components/home/Gallery";
 import { LocalStory } from "@/components/home/LocalStory";
 import { Process } from "@/components/home/Process";
@@ -32,6 +33,7 @@ export default function HomePage() {
       <ServicesPreview />
       <Transformation />
       <Differentiators />
+      <ResultsReel />
       <Gallery />
       <LocalStory />
       <Process />

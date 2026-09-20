@@ -3,16 +3,17 @@
 // name/address/phone/hours/links used anywhere on the site (header, footer,
 // contact page, JSON-LD schema, metadata). Never hardcode this info elsewhere.
 //
-// ⚠️ UNRESOLVED: location.status is "unverified". Two conflicting signals
-// were found during Phase 0 research:
-//   1) The client-supplied asset handoff + a Manta directory listing claim
-//      Port Charlotte, FL (4732 S Tamiami Trail, 33980) as primary.
-//   2) An independent web search surfaced a Facebook business page titled
-//      "Detail Kings 941 | North Port FL" — a different city.
-// Do NOT publish this site with a confirmed address until Fred/the client
-// verifies which is correct (see ASSET_AUDIT_REPORT.md). Until resolved,
-// components should render the phone number (confirmed) and a
-// "service area" framing rather than a hard street address.
+// ✅ RESOLVED (Phase 2.5): the address is now confirmed from the client's own
+// wrapped van. Two independent high-resolution photos in the Phase 2.5 media
+// handoff (IMG_5310, IMG_5373) show the printed address on the vehicle wrap:
+//   14290 Tamiami Trail, North Port, FL 34287
+// This is corroborated by (a) the official Facebook page titled "Detail Kings
+// 941 | North Port FL" and (b) ZIP 34287 being a North Port ZIP. The earlier
+// Port Charlotte candidate came only from an unclaimed/unverified Manta
+// directory listing and has been superseded. The van's printed phone
+// ((941) 979-6097) matches the confirmed business phone. Kept on claude-dev
+// for preview review before any promotion to main — Fred to give a final
+// visual confirm that this is the current storefront address.
 // ============================================================================
 
 import type { ServiceArea } from "@/types";
@@ -27,28 +28,17 @@ export const business = {
   },
   email: null as string | null, // not supplied yet
   location: {
-    status: "unverified" as "unverified" | "verified",
-    candidates: [
-      {
-        label: "Port Charlotte, FL",
-        street: "4732 S Tamiami Trail",
-        city: "Port Charlotte",
-        state: "FL",
-        zip: "33980",
-        source: "Client asset handoff + Manta directory listing (unclaimed/unverified)",
-      },
-      {
-        label: "North Port, FL",
-        street: null,
-        city: "North Port",
-        state: "FL",
-        zip: null,
-        source: 'Facebook page titled "Detail Kings 941 | North Port FL"',
-      },
-    ],
-    // Set once confirmed. Everything in the UI should read from here, not
-    // from the candidates above, once this is filled in.
-    confirmed: null as null | {
+    status: "verified" as "unverified" | "verified",
+    // Source of truth for the address, now resolved from the client's own van
+    // wrap (see header note). UI + schema read from `confirmed` only.
+    confirmed: {
+      street: "14290 Tamiami Trail",
+      city: "North Port",
+      state: "FL",
+      zip: "34287",
+      // Coordinates intentionally omitted — not measured. Schema/geo works
+      // without them; add precise lat/lng only from an authoritative source.
+    } as null | {
       street: string;
       city: string;
       state: string;
