@@ -4,46 +4,50 @@
 
 /* ==========================================================================
    DESIGN TOKENS — Detail Kings 941
-   Direction: not "black + gold luxury" (explicitly avoided per brief).
-   Palette instead pulls from the real environment the brand lives in:
-   deep ink-navy (a wet, freshly-detailed panel at night) + a warm citrus/
-   sunset ember accent (Florida light, not gold) + a Gulf-water teal used
-   sparingly for the local/regional story. Neutral chrome gradient stands in
-   for literal metal reflections. Swap these once a real logo/photo set
-   arrives — search this file for "DRAFT" to find what's provisional.
+   Brand-verified palette (Phase 2). Extracted directly from the confirmed
+   client logo (5 delivered variants) and cross-checked against the client's
+   own site.webmanifest theme_color (#7CFF00) — not invented. Pixel sampling
+   of the logo: ~33% true black, ~24% near-white, ~26% a saturated spring
+   green ranging from a #1ac402 base tone to a #a8f906 highlight, plus a
+   chrome/steel gradient on the polisher-tool illustration. No company-owned
+   wrapped vehicle or signage photo was included in the asset handoff, so the
+   logo (reinforced by the manifest's own explicit theme color) is the
+   authoritative brand source. The Phase 1 "ink-navy + ember" placeholder
+   palette was provisional and has been replaced in full — nothing here was
+   assumed correct going in. The previous invented teal ("tide") accent had
+   no basis in real brand assets and has been retired.
    ========================================================================== */
 
 :root {
-  /* DRAFT — replace with colors pulled from the confirmed client logo */
-  --color-ink-950: #070a12;
-  --color-ink-900: #0b101c;
-  --color-ink-800: #131a2b;
-  --color-ink-700: #1c2440;
-  --color-ink-600: #2a3358;
+  /* True near-black neutral scale — the brand's dark color has no blue tint */
+  --color-ink-950: #000000;
+  --color-ink-900: #0a0a0a;
+  --color-ink-800: #141414;
+  --color-ink-700: #1f1f1f;
+  --color-ink-600: #2e2e2e;
 
-  --color-steel-50: #f5f6f8;
-  --color-steel-100: #e8eaef;
-  --color-steel-200: #cfd3dd;
-  --color-steel-300: #a9afc0;
-  --color-steel-400: #7c839c;
-  --color-steel-500: #5b6280;
-  --color-steel-600: #454b66;
-  --color-steel-700: #343953;
+  /* Neutral gray scale — anchored to the logo's white field + polisher chrome */
+  --color-steel-50: #f8f8f8;
+  --color-steel-100: #eeeeee;
+  --color-steel-200: #d8d8da;
+  --color-steel-300: #b6b7ba;
+  --color-steel-400: #8d8e91;
+  --color-steel-500: #6c6d70;
+  --color-steel-600: #525355;
+  --color-steel-700: #3a3b3c;
 
-  --color-ember-400: #ff8a4c;
-  --color-ember-500: #ff5a1f;
-  --color-ember-600: #e0470f;
-  --color-ember-700: #b8380c;
+  /* Brand green — verified against logo pixels + webmanifest theme_color */
+  --color-lime-300: #c3ff66;
+  --color-lime-400: #a8f906;
+  --color-lime-500: #7cff00;
+  --color-lime-600: #5bcf00;
+  --color-lime-700: #3d9900;
 
-  --color-tide-400: #4fd8c9;
-  --color-tide-500: #14b8a6;
-  --color-tide-600: #0f9385;
+  --color-chrome-a: #f8f8f8;
+  --color-chrome-b: #b6b7ba;
+  --color-chrome-c: #6c6d70;
 
-  --color-chrome-a: #eef1f6;
-  --color-chrome-b: #b9c0cf;
-  --color-chrome-c: #7a8296;
-
-  --shadow-color: 220 60% 3%;
+  --shadow-color: 0 0% 0%;
 
   --font-display: "Oswald Variable", "Oswald", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -65,14 +69,11 @@
   --color-steel-600: var(--color-steel-600);
   --color-steel-700: var(--color-steel-700);
 
-  --color-ember-400: var(--color-ember-400);
-  --color-ember-500: var(--color-ember-500);
-  --color-ember-600: var(--color-ember-600);
-  --color-ember-700: var(--color-ember-700);
-
-  --color-tide-400: var(--color-tide-400);
-  --color-tide-500: var(--color-tide-500);
-  --color-tide-600: var(--color-tide-600);
+  --color-lime-300: var(--color-lime-300);
+  --color-lime-400: var(--color-lime-400);
+  --color-lime-500: var(--color-lime-500);
+  --color-lime-600: var(--color-lime-600);
+  --color-lime-700: var(--color-lime-700);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -128,13 +129,13 @@ body {
 }
 
 ::selection {
-  background: var(--color-ember-500);
-  color: white;
+  background: var(--color-lime-500);
+  color: var(--color-ink-950);
 }
 
 /* Focus visibility — never removed, only restyled to match the brand */
 :focus-visible {
-  outline: 2px solid var(--color-ember-400);
+  outline: 2px solid var(--color-lime-400);
   outline-offset: 3px;
   border-radius: 4px;
 }

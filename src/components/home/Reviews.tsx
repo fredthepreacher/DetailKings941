@@ -16,7 +16,7 @@ export function Reviews() {
       <section className="bg-steel-50 py-24 sm:py-32">
         <Container>
           <div className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-ink-950/8 bg-white px-8 py-16 text-center">
-            <Star className="h-8 w-8 text-ember-500" />
+            <Star className="h-8 w-8 text-lime-500" />
             <h2 className="mt-5 font-display text-2xl font-semibold uppercase tracking-tight text-ink-950 sm:text-3xl">
               Reviews Coming Soon
             </h2>
@@ -45,7 +45,7 @@ export function Reviews() {
           className="mx-auto"
         />
         {reviewSummary && (
-          <p className="mt-3 text-center font-display text-sm font-semibold uppercase tracking-wide text-ember-600">
+          <p className="mt-3 text-center font-display text-sm font-semibold uppercase tracking-wide text-lime-600">
             {reviewSummary.rating.toFixed(1)} ★ · {reviewSummary.count} Google reviews
           </p>
         )}
@@ -54,7 +54,7 @@ export function Reviews() {
             <figure key={review.id} className="rounded-2xl border border-ink-950/8 bg-white p-6">
               <div className="flex gap-0.5">
                 {Array.from({ length: review.rating }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-ember-500 text-ember-500" />
+                  <Star key={i} className="h-4 w-4 fill-lime-500 text-lime-500" />
                 ))}
               </div>
               <blockquote className="mt-4 text-sm leading-relaxed text-steel-700">

@@ -38,6 +38,7 @@ export type Service = {
   category: "interior" | "exterior" | "full-detail" | "paint" | "protection" | "add-on";
   verified: boolean; // false = drafted for client review, not confirmed real offering
   icon: string; // lucide-react icon name
+  image?: MediaAsset; // representative real client work photo, once available
 };
 
 export type Review = {

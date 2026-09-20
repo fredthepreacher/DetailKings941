@@ -18,7 +18,7 @@ export function MobileActionBar() {
       </a>
       <a
         href="/contact"
-        className="flex flex-1 items-center justify-center gap-2 bg-ember-500 py-3.5 font-display text-sm font-semibold uppercase tracking-wide text-white active:bg-ember-600"
+        className="flex flex-1 items-center justify-center gap-2 bg-lime-500 py-3.5 font-display text-sm font-semibold uppercase tracking-wide text-ink-950 active:bg-lime-600"
       >
         <NotebookPen className="h-4 w-4" />
         Get a Quote

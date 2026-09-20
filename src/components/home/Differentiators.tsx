@@ -15,7 +15,7 @@ export function Differentiators() {
         <div className="mt-14 grid gap-px overflow-hidden rounded-2xl bg-ink-950/8 sm:grid-cols-2">
           {differentiators.map((item) => (
             <div key={item.id} className="bg-steel-50 p-8">
-              <DynamicIcon name={item.icon} className="h-6 w-6 text-ember-600" strokeWidth={1.75} />
+              <DynamicIcon name={item.icon} className="h-6 w-6 text-lime-600" strokeWidth={1.75} />
               <h3 className="mt-4 font-display text-lg font-semibold uppercase tracking-tight text-ink-950">
                 {item.title}
               </h3>

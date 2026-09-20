@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { DynamicIcon } from "@/lib/icons";
 import { breadcrumbSchema } from "@/lib/schema";
+import { PlaceholderMedia } from "@/components/media/PlaceholderMedia";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -47,9 +48,15 @@ export default async function ServiceDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
       <Container>
+        {service.image && (
+          <div className="relative mb-12 aspect-[16/9] w-full overflow-hidden rounded-3xl sm:aspect-[21/9]">
+            <PlaceholderMedia asset={service.image} sizes="(min-width: 1024px) 1000px, 100vw" />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-transparent to-transparent" />
+          </div>
+        )}
         <div className="grid gap-14 lg:grid-cols-[1fr_360px]">
           <div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-ember-500 text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-500 text-ink-950">
               <DynamicIcon name={service.icon} className="h-6 w-6" strokeWidth={1.75} />
             </div>
             <h1 className="mt-6 font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-5xl">
@@ -60,7 +67,7 @@ export default async function ServiceDetailPage({
             </p>
 
             {!service.verified && (
-              <p className="mt-4 max-w-2xl rounded-lg border border-ember-500/30 bg-ember-500/10 px-4 py-2 text-xs text-ember-300">
+              <p className="mt-4 max-w-2xl rounded-lg border border-lime-500/30 bg-lime-500/10 px-4 py-2 text-xs text-lime-300">
                 Draft service description — pending confirmation from Detail Kings 941.
               </p>
             )}
@@ -73,7 +80,7 @@ export default async function ServiceDetailPage({
                 <ul className="mt-4 space-y-3">
                   {service.included.map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-sm text-steel-200">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-ember-500" />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-lime-500" />
                       {item}
                     </li>
                   ))}

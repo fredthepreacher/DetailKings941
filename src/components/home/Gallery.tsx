@@ -31,7 +31,7 @@ export function Gallery() {
           </Button>
         </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-4 sm:auto-rows-[160px] sm:grid-cols-6">
+        <div className="mt-14 grid auto-rows-[140px] grid-cols-2 gap-4 sm:auto-rows-[160px] sm:grid-cols-6">
           {galleryMedia.map((asset, i) => (
             <div
               key={asset.id}

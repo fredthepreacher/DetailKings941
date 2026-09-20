@@ -89,7 +89,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
   if (submitted) {
     return (
       <div className="flex flex-col items-center rounded-3xl border border-white/10 bg-ink-900 px-8 py-16 text-center">
-        <PartyPopper className="h-9 w-9 text-ember-500" />
+        <PartyPopper className="h-9 w-9 text-lime-500" />
         <h2 className="mt-5 font-display text-2xl font-semibold uppercase tracking-tight text-white sm:text-3xl">
           Request Received
         </h2>
@@ -99,7 +99,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
         </p>
         <a
           href={`tel:${business.phone.e164}`}
-          className="mt-6 font-display text-lg font-semibold text-ember-400 hover:text-ember-300"
+          className="mt-6 font-display text-lg font-semibold text-lime-400 hover:text-lime-300"
         >
           Call {business.phone.display}
         </a>
@@ -116,7 +116,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
             <div
               className={cn(
                 "h-1 rounded-full transition-colors duration-300",
-                i <= step ? "bg-ember-500" : "bg-white/10",
+                i <= step ? "bg-lime-500" : "bg-white/10",
               )}
             />
             <span
@@ -204,7 +204,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                       className={cn(
                         "flex items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-colors",
                         checked
-                          ? "border-ember-500 bg-ember-500/10 text-white"
+                          ? "border-lime-500 bg-lime-500/10 text-white"
                           : "border-white/10 text-steel-300 hover:border-white/25",
                       )}
                     >
@@ -212,10 +212,10 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                       <span
                         className={cn(
                           "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
-                          checked ? "border-ember-500 bg-ember-500" : "border-white/20",
+                          checked ? "border-lime-500 bg-lime-500" : "border-white/20",
                         )}
                       >
-                        {checked && <Check className="h-3.5 w-3.5 text-white" />}
+                        {checked && <Check className="h-3.5 w-3.5 text-ink-950" />}
                       </span>
                     </button>
                   );
@@ -244,7 +244,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                       className={cn(
                         "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
                         checked
-                          ? "border-ember-500 bg-ember-500/10 text-white"
+                          ? "border-lime-500 bg-lime-500/10 text-white"
                           : "border-white/10 text-steel-300 hover:border-white/25",
                       )}
                     >
@@ -359,7 +359,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
 }
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-ink-950 px-4 py-3 text-sm text-white placeholder:text-steel-600 outline-none transition-colors focus:border-ember-500";
+  "w-full rounded-xl border border-white/15 bg-ink-950 px-4 py-3 text-sm text-white placeholder:text-steel-600 outline-none transition-colors focus:border-lime-500";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

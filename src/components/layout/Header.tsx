@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, Phone, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -48,11 +49,25 @@ export function Header() {
       <Container className="flex h-18 items-center justify-between py-3 sm:h-20">
         <Link
           href="/"
-          className="font-display text-lg font-bold uppercase tracking-wide text-white sm:text-xl"
+          className="flex items-center"
           onClick={() => setMenuOpen(false)}
+          aria-label={brandLogo.wordmarkFallback}
         >
-          {brandLogo.wordmarkFallback.split(" 941")[0]}
-          <span className="text-ember-500"> 941</span>
+          {brandLogo.mark ? (
+            <Image
+              src={brandLogo.mark}
+              alt={brandLogo.wordmarkFallback}
+              width={176}
+              height={176}
+              priority
+              className="h-12 w-12 sm:h-14 sm:w-14"
+            />
+          ) : (
+            <span className="font-display text-lg font-bold uppercase tracking-wide text-white sm:text-xl">
+              {brandLogo.wordmarkFallback.split(" 941")[0]}
+              <span className="text-lime-500"> 941</span>
+            </span>
+          )}
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -70,7 +85,7 @@ export function Header() {
         <div className="hidden items-center gap-4 lg:flex">
           <a
             href={`tel:${business.phone.e164}`}
-            className="flex items-center gap-2 font-display text-sm font-semibold text-white transition-colors hover:text-ember-400"
+            className="flex items-center gap-2 font-display text-sm font-semibold text-white transition-colors hover:text-lime-400"
           >
             <Phone className="h-4 w-4" />
             {business.phone.display}

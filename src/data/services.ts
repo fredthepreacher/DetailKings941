@@ -9,8 +9,9 @@
 // ============================================================================
 
 import type { Service } from "@/types";
+import { serviceImages } from "@/data/media";
 
-export const services: Service[] = [
+const draftServices: Service[] = [
   {
     slug: "interior-detailing",
     name: "Interior Detailing",
@@ -109,6 +110,12 @@ export const services: Service[] = [
     icon: "Truck",
   },
 ];
+
+// Real client work photo per service, once available (see src/data/media.ts).
+export const services: Service[] = draftServices.map((service) => ({
+  ...service,
+  image: serviceImages[service.slug],
+}));
 
 export const serviceCategoryLabels: Record<Service["category"], string> = {
   interior: "Interior",

@@ -26,7 +26,7 @@ export function FinalCTA() {
           </Button>
           <a
             href={`tel:${business.phone.e164}`}
-            className="flex items-center gap-2 font-display text-base font-semibold text-white hover:text-ember-400"
+            className="flex items-center gap-2 font-display text-base font-semibold text-white hover:text-lime-400"
           >
             <Phone className="h-4 w-4" />
             {business.phone.display}

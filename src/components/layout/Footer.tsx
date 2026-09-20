@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { business } from "@/data/business";
 import { services } from "@/data/services";
+import { brandLogo } from "@/data/media";
 import { Container } from "@/components/ui/Container";
 import { FacebookIcon, InstagramIcon } from "@/components/ui/SocialIcons";
 
@@ -20,9 +22,19 @@ export function Footer() {
       <Container>
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-display text-xl font-bold uppercase tracking-wide text-white">
-              Detail Kings<span className="text-ember-500"> 941</span>
-            </p>
+            {brandLogo.mark ? (
+              <Image
+                src={brandLogo.mark}
+                alt={brandLogo.wordmarkFallback}
+                width={176}
+                height={176}
+                className="h-14 w-14"
+              />
+            ) : (
+              <p className="font-display text-xl font-bold uppercase tracking-wide text-white">
+                Detail Kings<span className="text-lime-500"> 941</span>
+              </p>
+            )}
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-steel-400">
               Southwest Florida auto detailing — hand-finished interior and
               exterior work for daily drivers, trucks, and SUVs across the
@@ -34,7 +46,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Detail Kings 941 on Instagram"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-steel-300 transition-colors hover:border-ember-500 hover:text-ember-400"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-steel-300 transition-colors hover:border-lime-500 hover:text-lime-400"
               >
                 <InstagramIcon className="h-4 w-4" />
               </a>
@@ -43,7 +55,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Detail Kings 941 on Facebook"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-steel-300 transition-colors hover:border-ember-500 hover:text-ember-400"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-steel-300 transition-colors hover:border-lime-500 hover:text-lime-400"
               >
                 <FacebookIcon className="h-4 w-4" />
               </a>
@@ -96,12 +108,12 @@ export function Footer() {
                   href={`tel:${business.phone.e164}`}
                   className="flex items-start gap-3 text-sm text-steel-300 transition-colors hover:text-white"
                 >
-                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-ember-500" />
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-lime-500" />
                   {business.phone.display}
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-steel-300">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ember-500" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-lime-500" />
                 Serving Southwest Florida / the 941 area
               </li>
             </ul>

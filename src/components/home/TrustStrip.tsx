@@ -21,7 +21,7 @@ export function TrustStrip() {
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:justify-between">
           {reviewSummary && (
             <div className="flex items-center gap-2 font-display text-sm font-semibold uppercase tracking-wide text-white">
-              <span className="text-ember-500">★ {reviewSummary.rating.toFixed(1)}</span>
+              <span className="text-lime-500">★ {reviewSummary.rating.toFixed(1)}</span>
               Google Rating · {reviewSummary.count} Reviews
             </div>
           )}
@@ -30,7 +30,7 @@ export function TrustStrip() {
               key={item.label}
               className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.15em] text-steel-400"
             >
-              <item.icon className="h-4 w-4 text-ember-500" strokeWidth={1.75} />
+              <item.icon className="h-4 w-4 text-lime-500" strokeWidth={1.75} />
               {item.label}
             </div>
           ))}

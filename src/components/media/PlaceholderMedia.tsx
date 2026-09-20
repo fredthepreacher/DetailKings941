@@ -44,14 +44,14 @@ export function PlaceholderMedia({
       role="img"
       aria-label={asset.alt}
     >
-      {/* Soft ember glow so the empty state reads as designed, not broken */}
+      {/* Soft brand-lime glow so the empty state reads as designed, not broken */}
       <div
         className="absolute -right-1/4 -top-1/4 h-2/3 w-2/3 rounded-full opacity-[0.12] blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--color-ember-500), transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, var(--color-lime-500), transparent 70%)" }}
       />
       <div
         className="absolute -left-1/4 -bottom-1/4 h-2/3 w-2/3 rounded-full opacity-[0.08] blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--color-tide-500), transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, var(--color-chrome-b), transparent 70%)" }}
       />
       <div
         className="absolute inset-0 opacity-[0.07]"

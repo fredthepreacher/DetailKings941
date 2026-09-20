@@ -45,7 +45,7 @@ export function LocalStory() {
           <div className="grid gap-4 sm:grid-cols-2">
             {CONDITIONS.map((item) => (
               <div key={item.title} className="rounded-xl border border-ink-950/8 bg-white p-6">
-                <item.icon className="h-5 w-5 text-ember-600" strokeWidth={1.75} />
+                <item.icon className="h-5 w-5 text-lime-600" strokeWidth={1.75} />
                 <h3 className="mt-4 font-display text-base font-semibold uppercase tracking-tight text-ink-950">
                   {item.title}
                 </h3>

@@ -34,7 +34,7 @@ export default function AboutPage() {
         <div className="mt-20 grid gap-6 sm:grid-cols-2">
           {differentiators.map((item) => (
             <div key={item.id} className="rounded-2xl border border-white/10 bg-ink-900 p-7">
-              <DynamicIcon name={item.icon} className="h-6 w-6 text-ember-500" strokeWidth={1.75} />
+              <DynamicIcon name={item.icon} className="h-6 w-6 text-lime-500" strokeWidth={1.75} />
               <h3 className="mt-4 font-display text-lg font-semibold uppercase tracking-tight text-white">
                 {item.title}
               </h3>

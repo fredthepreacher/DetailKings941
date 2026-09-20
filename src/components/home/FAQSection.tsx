@@ -31,7 +31,7 @@ export function FAQSection() {
                   <ChevronDown
                     className={cn(
                       "h-5 w-5 shrink-0 text-steel-400 transition-transform duration-300",
-                      open && "rotate-180 text-ember-500",
+                      open && "rotate-180 text-lime-500",
                     )}
                   />
                 </button>

@@ -84,7 +84,7 @@ export function BeforeAfterSlider({
               if (e.key === "ArrowLeft") setPosition((p) => Math.max(0, p - 5));
               if (e.key === "ArrowRight") setPosition((p) => Math.min(100, p + 5));
             }}
-            className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-ink-950 shadow-lg ring-4 ring-white/30 focus-visible:ring-ember-400"
+            className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-ink-950 shadow-lg ring-4 ring-white/30 focus-visible:ring-lime-400"
           >
             <ChevronsLeftRight className="h-5 w-5" strokeWidth={2} />
           </div>

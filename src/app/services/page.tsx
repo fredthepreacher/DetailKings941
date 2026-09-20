@@ -27,11 +27,11 @@ export default function ServicesPage() {
             <Link
               key={service.slug}
               href={`/services/${service.slug}`}
-              className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-ink-900 p-7 transition-all hover:-translate-y-1 hover:border-ember-500/40"
+              className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-ink-900 p-7 transition-all hover:-translate-y-1 hover:border-lime-500/40"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <DynamicIcon name={service.icon} className="h-6 w-6 text-ember-500" strokeWidth={1.75} />
+                  <DynamicIcon name={service.icon} className="h-6 w-6 text-lime-500" strokeWidth={1.75} />
                   <span className="font-display text-[10px] font-semibold uppercase tracking-[0.2em] text-steel-500">
                     {serviceCategoryLabels[service.category]}
                   </span>
@@ -43,7 +43,7 @@ export default function ServicesPage() {
                   {service.shortDescription}
                 </p>
               </div>
-              <div className="mt-6 flex items-center gap-1.5 font-display text-xs font-semibold uppercase tracking-wide text-ember-500">
+              <div className="mt-6 flex items-center gap-1.5 font-display text-xs font-semibold uppercase tracking-wide text-lime-500">
                 View details
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>

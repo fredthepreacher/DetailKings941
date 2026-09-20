@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, Star } from "lucide-react";
 import { business } from "@/data/business";
 import { reviewSummary } from "@/data/reviews";
-import { heroMedia } from "@/data/media";
+import { heroMedia, heroMediaMobile } from "@/data/media";
 import { PlaceholderMedia } from "@/components/media/PlaceholderMedia";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -13,7 +13,15 @@ export function Hero() {
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink-950">
       <div className="absolute inset-0">
-        <PlaceholderMedia asset={heroMedia} priority sizes="100vw" className="scale-105" />
+        {/* Art-directed per breakpoint: the mobile derivative is a genuine
+            portrait crop from the client's source, not a stretched/cropped
+            copy of the desktop landscape frame. */}
+        <div className="absolute inset-0 md:hidden">
+          <PlaceholderMedia asset={heroMediaMobile} priority sizes="100vw" className="scale-105 object-[75%_center]" />
+        </div>
+        <div className="absolute inset-0 hidden md:block">
+          <PlaceholderMedia asset={heroMedia} priority sizes="100vw" className="scale-105 object-[70%_center]" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/70 to-ink-950/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950/60 via-transparent to-ink-950/30" />
       </div>
@@ -25,7 +33,7 @@ export function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-ember-500" />
+            <span className="h-1.5 w-1.5 rounded-full bg-lime-500" />
             <span className="font-display text-xs font-medium uppercase tracking-[0.2em] text-steel-200">
               Southwest Florida · 941
             </span>
@@ -67,7 +75,7 @@ export function Hero() {
                     key={i}
                     className={
                       i < Math.round(reviewSummary!.rating)
-                        ? "h-4 w-4 fill-ember-500 text-ember-500"
+                        ? "h-4 w-4 fill-lime-500 text-lime-500"
                         : "h-4 w-4 text-steel-600"
                     }
                   />
@@ -78,7 +86,7 @@ export function Hero() {
               </div>
             ) : (
               <div className="flex items-center gap-1.5 text-sm text-steel-300">
-                <ShieldCheck className="h-4 w-4 text-ember-500" />
+                <ShieldCheck className="h-4 w-4 text-lime-500" />
                 <span>Locally owned &amp; operated</span>
               </div>
             )}
