@@ -161,11 +161,14 @@ export const beforeAfterPairs: BeforeAfterPair[] = [
   {
     id: "transformation-headlight",
     title: "Headlight Restoration",
-    vehicle: "Red sedan",
+    vehicle: "Mercedes-Benz",
     service: "headlight-restoration",
-    before: real("ba-headlight-before", "/images/before-after/red_headlight_before_02.webp", "Before — oxidized, hazy headlight", 412, 412),
-    after: real("ba-headlight-after", "/images/before-after/red_headlight_after_02.webp", "After — restored, clear headlight", 412, 412),
-    orientation: "square",
+    // Phase 2.5: replaced the low-res red-sedan pair with a genuine same-lamp
+    // before/after of a black Mercedes (IMG_0239 hazy → IMG_0241 clear),
+    // native 1200px source — dramatically better quality.
+    before: real("ba-headlight-before", "/images/phase2-5/detail-kings-mercedes-headlight-before.webp", "Before — oxidized, hazed-over headlight lens", 1200, 800),
+    after: real("ba-headlight-after", "/images/phase2-5/detail-kings-mercedes-headlight-after.webp", "After — restored, crystal-clear LED headlight", 1200, 800),
+    orientation: "landscape",
   },
   {
     id: "transformation-seats-wide",
