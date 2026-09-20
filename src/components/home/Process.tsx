@@ -29,7 +29,7 @@ export function Process() {
   return (
     <section className="relative overflow-hidden bg-ink-950 py-24 sm:py-32">
       <Container>
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-20">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-20">
           {/* Portrait process footage — real foam-wash motion */}
           <div className="relative mx-auto w-full max-w-sm lg:mx-0">
             <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-white/10">

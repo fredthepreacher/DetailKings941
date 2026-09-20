@@ -3,17 +3,19 @@
 // name/address/phone/hours/links used anywhere on the site (header, footer,
 // contact page, JSON-LD schema, metadata). Never hardcode this info elsewhere.
 //
-// ✅ RESOLVED (Phase 2.5): the address is now confirmed from the client's own
-// wrapped van. Two independent high-resolution photos in the Phase 2.5 media
-// handoff (IMG_5310, IMG_5373) show the printed address on the vehicle wrap:
+// ⚠️ UNRESOLVED: location.status is "unverified" — do NOT publish a definitive
+// address, coordinates, directions link, or address-bearing LocalBusiness
+// schema until the client confirms.
+//
+// Strongest candidate (Phase 2.5): two high-res photos of the client's own
+// wrapped van (IMG_5310, IMG_5373) show a printed address —
 //   14290 Tamiami Trail, North Port, FL 34287
-// This is corroborated by (a) the official Facebook page titled "Detail Kings
-// 941 | North Port FL" and (b) ZIP 34287 being a North Port ZIP. The earlier
-// Port Charlotte candidate came only from an unclaimed/unverified Manta
-// directory listing and has been superseded. The van's printed phone
-// ((941) 979-6097) matches the confirmed business phone. Kept on claude-dev
-// for preview review before any promotion to main — Fred to give a final
-// visual confirm that this is the current storefront address.
+// corroborated by the official Facebook page ("Detail Kings 941 | North Port
+// FL") and by 34287 being a North Port ZIP. This is promising but is being
+// held as a CANDIDATE pending an explicit client confirmation, per Fred's
+// instruction. The earlier Port Charlotte entry came only from an unclaimed
+// Manta listing. Until `confirmed` is set, the UI shows service-area framing
+// (phone is confirmed) and schema omits the address entirely.
 // ============================================================================
 
 import type { ServiceArea } from "@/types";
@@ -28,17 +30,30 @@ export const business = {
   },
   email: null as string | null, // not supplied yet
   location: {
-    status: "verified" as "unverified" | "verified",
-    // Source of truth for the address, now resolved from the client's own van
-    // wrap (see header note). UI + schema read from `confirmed` only.
-    confirmed: {
-      street: "14290 Tamiami Trail",
-      city: "North Port",
-      state: "FL",
-      zip: "34287",
-      // Coordinates intentionally omitted — not measured. Schema/geo works
-      // without them; add precise lat/lng only from an authoritative source.
-    } as null | {
+    status: "unverified" as "unverified" | "verified",
+    candidates: [
+      {
+        label: "North Port, FL (van-wrap candidate — pending confirmation)",
+        street: "14290 Tamiami Trail",
+        city: "North Port",
+        state: "FL",
+        zip: "34287",
+        source:
+          "Printed on the client's own wrapped van (IMG_5310, IMG_5373); corroborated by the official Facebook page and the 34287 ZIP. Held pending explicit client confirmation.",
+      },
+      {
+        label: "Port Charlotte, FL (superseded)",
+        street: "4732 S Tamiami Trail",
+        city: "Port Charlotte",
+        state: "FL",
+        zip: "33980",
+        source: "Unclaimed/unverified Manta directory listing.",
+      },
+    ],
+    // Set ONLY once the client confirms. UI + schema read from `confirmed`;
+    // while it is null the site shows service-area framing and omits address
+    // schema, coordinates, and directions.
+    confirmed: null as null | {
       street: string;
       city: string;
       state: string;

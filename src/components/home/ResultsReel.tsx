@@ -37,7 +37,7 @@ export function ResultsReel() {
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 sm:gap-8">
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
           {resultVideos.map((asset, i) => (
             <figure
               key={asset.id}

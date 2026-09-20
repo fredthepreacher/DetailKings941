@@ -1,16 +1,19 @@
 import { Phone } from "lucide-react";
 import { business } from "@/data/business";
-import { heroMedia } from "@/data/media";
-import { PlaceholderMedia } from "@/components/media/PlaceholderMedia";
+import { resultVideos } from "@/data/media";
+import { VideoMedia } from "@/components/media/VideoMedia";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
 export function FinalCTA() {
   return (
     <section className="relative overflow-hidden bg-ink-950 py-28 sm:py-36">
-      <div className="absolute inset-0 opacity-40">
-        <PlaceholderMedia asset={heroMedia} sizes="100vw" />
+      {/* Subtle closing motion — reuses an already-shipped derivative, stays
+          lazy + viewport-gated, and drops to the poster under reduced motion. */}
+      <div className="absolute inset-0 opacity-35">
+        <VideoMedia asset={resultVideos[1]} objectClassName="object-[50%_35%]" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/85 to-ink-950/60" />
+        <div className="grain-overlay" />
       </div>
       <Container className="relative z-10 text-center">
         <h2 className="mx-auto max-w-3xl text-balance font-display text-4xl font-bold uppercase leading-[1.02] tracking-tight text-white sm:text-6xl">
