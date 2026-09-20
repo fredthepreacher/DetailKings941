@@ -1,173 +1,153 @@
 # Detail Kings 941 — Phase 2.5 Completion Report
 Cinematic Creative-Direction + Video Integration Pass · Wavy Sites / Claude · 2026-09-20
 
-This was an art-direction, video, motion, and graphic-design pass on the existing,
-working site — not a rebuild. The architecture, routing, quote flow, centralized
-data layer, SEO/schema framework, CI, and Git workflow were all preserved. All work
-is on `claude-dev`; nothing was promoted to `main`.
+An art-direction, video, motion, and graphic-design pass on the existing working site
+— not a rebuild. Architecture, routing, quote flow, centralized data, SEO/schema,
+accessibility, CI, and Git discipline were all preserved. All work is on `claude-dev`;
+nothing was promoted to `main`.
 
-## MEDIA AUDIT
+## 1. WIP REVIEW — what was present on resume
 
-Every asset in the Phase 2.5 Drive package (11 MOV videos, 13 HEIC photos) was
-inspected frame-by-frame (contact sheets from three timecodes per clip; full HEIC
-conversions).
+The interrupted state already had: audited/encoded video derivatives (H.264 desktop +
+mobile + WebP posters) from the client's own clips; new native-resolution photography
+converted from HEIC; a working `VideoMedia` component (autoplay/muted/loop, lazy,
+viewport-gated, reduced-motion → poster); a cinematic video hero; a new ResultsReel
+section; a foam-wash motion tile in Process; an editorial masonry gallery; and the
+Phase 2.5 graphic vocabulary in `globals.css`. Build/lint/typecheck were green.
 
-**Videos**
+## 2. IMPROVEMENTS made this pass (beyond the interrupted version)
 
-| File | Grade | Disposition |
+- **Services section rebuilt.** It was still the "six equal cards" pattern the brief
+  warns against. Replaced with an editorial split: a large **image-led featured service**
+  (Full Detail, real Bentley photo) beside a **numbered index** (01–06) of the rest with
+  hairline dividers and lime hover accents. Real hierarchy, tied to real work.
+- **Final CTA motion.** The closing CTA was a static image; it now runs a subtle,
+  heavily-darkened result-walkaround loop (reusing an already-shipped derivative — no
+  new payload), viewport-gated and reduced-motion safe.
+- **Mobile overflow fix.** The new bare `grid` bases allowed auto-width columns to exceed
+  the viewport (a real 674px-on-390px regression the featured tile introduced). Added
+  explicit `grid-cols-1` bases to Services, ResultsReel, and Process. Re-verified: no
+  horizontal overflow at 375/390/430.
+- **Address reverted to pending** (see §15) per your instruction.
+
+## 3. HERO
+
+Compared all clips; **IMG_8059** (Mercedes foam wash in front of the lime wash-bay)
+remains the strongest — it's active *process* energy, not a static walkaround, and the
+green structure behind the car ties the frame to the brand color with no overlay tricks.
+Trimmed to a 7.5s loop; 720×1280 desktop MP4 (2.8 MB) + 480×854 mobile MP4 (948 KB) +
+WebP poster (also the reduced-motion still). Autoplay, muted, loop, `playsInline`, dark
+cinematic gradients + film grain for legibility, lime accents, high-contrast CTAs.
+
+## 4. VIDEO — every clip and where it lives
+
+| Placement | Clip | Behavior |
 |---|---|---|
-| IMG_8059 (Mercedes foam wash, lime wash-bay) | A | **Used — homepage hero** |
-| IMG_9073 (dark SUV foam bath) | A | **Used — Process motion tile** |
-| IMG_5418 (Ford F-150 Tremor walkaround, van in frame) | A | **Used — Results reel** |
-| IMG_8323 (white BMW X7 walkaround, van reveal) | A | **Used — Results reel** |
-| IMG_9780 (bright-green branded van, close) | A / Brand | **Used — brand verification** (not published as a tile) |
-| IMG_7474 (white sedan, branded van in scene) | B+ / Brand | Brand verification (secondary), held |
-| IMG_5414 (truck exterior detailing) | B | Held — strong candidate for a future service page |
-| IMG_5874 (blue truck, large wheels) | B | Held — automotive-culture moment |
-| IMG_8060 (black sedan result, dealer lot) | B | Held — busier background |
-| IMG_9103 (blue SUV result, parking lot) | B | Held |
-| IMG_5864 (truck with pool-service branding) | **D** | **Excluded — another company** (see Excluded Content) |
+| Hero | IMG_8059 (Mercedes foam wash) | eager, autoplay |
+| Process tile | IMG_9073 (dark SUV foam bath) | lazy, viewport-gated |
+| Results reel | IMG_5418 (Ford Tremor, van in frame) | lazy, viewport-gated |
+| Results reel | IMG_8323 (BMW X7 walkaround) | lazy, viewport-gated |
+| Final CTA (bg) | IMG_8323 reused (darkened) | lazy, viewport-gated |
 
-**Photos**
+All non-hero clips fetch their source only within 200px of the viewport, **play on enter
+/ pause on exit**, and fall back to a poster still under `prefers-reduced-motion` (QA
+confirmed zero `<video>` elements in that mode). Never more than one or two playing at
+once. IMG_9780 and IMG_7474 were used for brand verification, not published.
 
-| File | Grade | Disposition |
-|---|---|---|
-| IMG_5375 (yellow Jeep Wrangler + van) | A | **Used — gallery** |
-| IMG_5373 (white Mercedes-AMG CLA + van) | A | **Used — gallery** (also an address source) |
-| IMG_5310 (silver Kia K5 + van) | A | **Used — gallery** (also an address source) |
-| IMG_8319 (white Toyota RAV4 + van) | A | **Used — gallery** |
-| IMG_7115 (white Bentley Bentayga + van) | A | **Used — gallery + Full-Detail service** |
-| IMG_6196 (red Corvette C8 foam bath) | A | **Used — gallery** (rotation-corrected) |
-| IMG_9778 (van, full service list) | A / Brand | **Used — gallery** |
-| IMG_0241 (Mercedes clear LED headlight) | A | **Used — Headlight-Restoration service** |
-| IMG_7106 (van logo close-up) | B / Brand | Converted, held (brand asset) |
-| IMG_9981 (Lincoln hazed headlight) | B | Converted, held (before-state candidate) |
-| IMG_0239 (Mercedes hazed headlight) | B | Converted, held |
-| IMG_9980 (gold sedan headlight close-up) | B | Held |
-| IMG_5904 (4Runner mid-wash, heavy blue cast) | C | Not used — reference only |
+## 5. GRAPHIC DESIGN
 
-Net: **8 A-grade photos and 4 video clips** entered visible sections; 2 clips were used
-for brand verification; the rest are graded and held for future service/gallery expansion.
+Restrained editorial-automotive vocabulary, centralized in `globals.css` and reused:
+edge labels (uppercase micro-labels with a lime tick), chrome hairlines, oversized
+outlined "ghost" type (the "FINISHED" wordmark behind the reel; 01–04 process numerals),
+film grain over footage, controlled lime glow, asymmetric composition (offset reel tile),
+and oversized display headlines. No racing flags, flames, gold, neon, or endless rounded
+cards. The homepage rhythm now varies deliberately: cinematic hero → editorial services
+split → transformation feature → results reel → masonry gallery → process split → CTA.
 
-## VIDEO
+## 6. BRAND
 
-Four clips were trimmed to their strongest 6.5–8s segments and transcoded to H.264
-MP4 (`yuv420p`, `+faststart`) with WebP posters. Sources were rotation-flagged
-(`rotation=-90`) portrait phone clips; the encode bakes in the correct orientation
-and crops intentionally rather than shipping the raw file. No AI repainting, invented
-reflections, or fabricated states — only trim, scale, and compression, per the
-package's authenticity rules.
+The mandatory revalidation against the **real wrapped van** was possible for the first
+time (Phase 2 had no van photo). I pixel-sampled the saturated-green wrap regions in
+IMG_9780/IMG_7474 and compared them to the logo vinyl and the current `--color-lime-500`
+token. **Finding: the token holds — no change.** The wrap's intrinsic green is the same
+spring-green family as the logo; its apparent hue drifts warmer/desaturated in the clips
+only because of outdoor lighting on a curved panel. Black/white/chrome relationships
+match. Green is used as energy and recognition (CTAs, accents, labels, hovers), not
+smeared across every surface.
 
-## HERO
+## 7. GALLERY
 
-Chosen clip: **IMG_8059** — the Mercedes being foam-washed in front of the client's
-own lime-green wash bay. It's the strongest *active-detailing* motion in the batch
-(process, not a static walkaround), and the green structure behind the car ties the
-frame to the brand color without any overlay trickery. Trimmed to a 7.5s loop,
-delivered as a 720×1280 desktop MP4 (2.8 MB) and a lighter 480×854 mobile MP4
-(948 KB), with a WebP poster that doubles as the `prefers-reduced-motion` still.
-Autoplay, muted, looped, `playsInline`.
+Moved from an equal-weight grid to an **editorial masonry** that runs photos at their
+natural aspect ratio (no aggressive cropping, per the authenticity rules) and leads with
+the new native-resolution photography (1200–1600px) — several with the branded van in
+frame as real brand-in-context proof. Weaker 412px social upscales were demoted; B/C
+assets were held rather than shown.
 
-## BRAND
+## 8. SERVICES
 
-The mandatory revalidation against the real wrapped vehicle was **finally possible**
-this pass (Phase 2 had no van photo and relied on the logo alone). I pixel-sampled the
-saturated-green regions of the actual wrap in IMG_9780/IMG_7474 and compared them to
-the logo vinyl and the current `--color-lime-500` token (`#7CFF00`).
+Homepage Services is now an image-led featured tile + numbered index (see §2). Per-service
+detail pages continue to lead with real representative photos; Full Detail and Headlight
+Restoration were upgraded to the new native-resolution photography. No invented pricing or
+unverified inclusions — service copy remains the labeled draft pending client confirmation.
 
-Finding: **the existing token holds — no change made.** The wrap's intrinsic green is
-the same spring-green family as the logo; its apparent hue in the clips drifts slightly
-warmer/desaturated (~`#9ccc66` in patches) purely because of outdoor lighting and shadow
-on a curved panel, not because the brand color differs. Black + white + chrome/steel
-relationships on the wrap match the token system exactly. So the real van *validated*
-the Phase 2 palette rather than revising it — which is the honest result, and a stronger
-footing than Phase 2 could claim.
+## 9. MOBILE
 
-## GRAPHIC DESIGN
+Designed, not shrunk: hero uses a dedicated portrait crop + the lighter mobile MP4;
+results reel and process tiles collapse to single-column portrait (phone-native framing);
+gallery masonry drops to one column; the services split stacks (featured tile then index);
+type scales per breakpoint. Verified at **375 / 390 / 430 / 768 / 1440** — no horizontal
+overflow, sticky action bar and tap targets intact.
 
-Introduced a restrained editorial-automotive vocabulary (all in `globals.css`, reused
-across sections — no scattered one-offs):
-
-- **Edge labels** — uppercase micro-labels with a leading lime tick (`.edge-label`) as section markers.
-- **Chrome hairlines** (`.rule-chrome`) — thin metallic gradient rules separating sections.
-- **Ghost type** (`.ghost-type`) — oversized outlined numerals/words (the "FINISHED" wordmark behind the results reel, the 01–04 process numerals) for depth and layering.
-- **Film grain** (`.grain-overlay`) — a fine SVG-noise overlay on footage so clips read as graded, not raw phone capture.
-- **Controlled lime glow** + asymmetric offsets (the second results tile drops 4rem) for composition and rhythm.
-- Oversized display headlines (hero now up to `8.5rem`), corner metadata, and a scroll cue.
-
-No racing flags, flames, or car silhouettes — kept modern and confident.
-
-## MOTION
-
-Three deliberately spaced video moments, never all playing at once:
-
-1. **Hero** (top) — cinematic foam-wash loop, eager/autoplay.
-2. **Results Reel** (mid) — two portrait walkaround tiles (Ford Tremor with the van in
-   frame; BMW X7), lazy + viewport-gated.
-3. **Process** (lower) — a portrait foam-bath tile beside the numbered steps.
-
-All non-hero video is wrapped in a shared `VideoMedia` client component:
-`IntersectionObserver` loads the source only within 200px of the viewport, **plays on
-enter and pauses on exit**, swaps to a lighter mobile derivative under 768px, and —
-under `prefers-reduced-motion` — renders the poster still and never plays. Verified in
-QA: reduced-motion produced **zero `<video>` elements**.
-
-## PERFORMANCE
+## 10. PERFORMANCE
 
 Source → optimized: the four used source clips total ~17 MB of raw MOV; shipped
 derivatives total ~8 MB, and only the hero loads up front (948 KB mobile / 2.8 MB
-desktop via responsive source). The three below-the-fold clips (1.1–2.0 MB each) don't
-fetch until near-viewport and pause offscreen. Posters are 32–116 KB WebP. New
-photography is 11 WebP files at 3.2 MB total (1200–1600px, real native resolution — a
-step up from Phase 2's 412px social upscales). No new render-blocking requests; hero
-uses `priority`, everything else stays lazy.
+desktop, chosen responsively). The below-the-fold clips (1.1–2.0 MB) don't fetch until
+near-viewport and pause offscreen; the CTA reuses an already-shipped file (no new bytes).
+Posters are 32–116 KB WebP. New photography: 11 WebP at 3.2 MB total. No new
+render-blocking requests; hero uses `priority`, everything else stays lazy.
 
-## RESPONSIVE
-
-Mobile was designed, not shrunk: hero uses a dedicated portrait video crop and the
-lighter mobile MP4; the results reel and process tiles collapse to single-column
-portrait (phone-native framing); the gallery masonry drops to one column; oversized
-type scales down per breakpoint. Verified at **375 / 390 / 430 / 768 / 1440** — **no
-horizontal overflow at any width**, tap targets and the sticky mobile action bar intact.
-
-## QA
+## 11. QA
 
 - `npx tsc --noEmit` — clean
-- `npm run lint` — clean (a `set-state-in-effect` finding on the first video component was fixed by moving media-query reads to `useSyncExternalStore`)
-- `npm run build` — clean, all 18 routes generated
-- Visual: Playwright viewport captures at 3 breakpoints across hero, transformation, results reel, gallery, and process; reduced-motion pass confirmed poster-only rendering. (No unit test suite exists in the project yet.)
+- `npm run lint` — clean
+- `npm run build` — clean, 18 routes generated
+- Visual (Playwright): hero, services, transformation, results reel, gallery, process,
+  final CTA across 375/390/430/768/1440; reduced-motion pass confirmed poster-only;
+  address-leak check on rendered HTML + JSON-LD confirmed **no address emitted**.
+- No unit-test suite exists in the project yet.
 
-## EXCLUDED CONTENT
+## 12. GIT
 
-- **IMG_5864.mov** — verified to show a truck wrapped for **"Daniel's Pool Service"**,
-  a different business. Excluded entirely from customer-facing content, exactly as
-  flagged; never presented as Detail Kings work.
-- **IMG_5904 (photo)** — heavy blue color cast, mid-wash, low usable quality — held as
-  reference only.
-- Four B-grade result clips and several B-grade photos were graded and **held**, not
-  published, to keep the curation tight rather than dumping every file onto the site.
+Branch `claude-dev`. Phase 2.5 checkpoints: `8982bdd` (cinematic pass) → `7e73153`
+(report) → `cab664d` (senior-review improvements — the Phase 2.5 code checkpoint), with
+this report as the commit on top (its exact SHA is in the chat handoff / bundle). On top
+of `6669180` (Phase 2 + CI) and `f52dde7` (Phase 2). `main` untouched at `30a9bc1`.
 
-## ADDRESS RESOLVED (previously open since Phase 1)
+## 13. CI
 
-The business address was confirmed from the client's **own wrapped van**, printed on it
-in two independent high-res photos (IMG_5310, IMG_5373): **14290 Tamiami Trail, North
-Port, FL 34287**. Corroborated by the official Facebook page ("Detail Kings 941 | North
-Port FL") and by 34287 being a North Port ZIP; the van's printed phone matches the
-confirmed number. The old Port Charlotte candidate was only ever an unclaimed Manta
-listing and has been superseded. This is now wired into `business.location.confirmed`,
-so the footer shows the address and the `AutomotiveBusiness` JSON-LD now emits a full
-`PostalAddress`. **Fred: please give a final visual confirm this is the current
-storefront before promotion to `main`.**
+The workflow runs on pushes to `claude-dev` (added in `6669180`). It will run against this
+checkpoint **once the branch is pushed** — which must go through the `claude.ai/code`
+bundle handoff, because this Cowork session cannot push (session-level git-proxy
+restriction). CI status will be confirmable there.
 
-## GIT
+## 14. VERCEL
 
-New checkpoint on `claude-dev`: commit `8982bdd` (on top of `6669180` Phase 2 + CI,
-and `f52dde7` Phase 2). `main` untouched at Phase 1 (`30a9bc1`).
+I **cannot push from this session**, so the Vercel Preview cannot be created or verified
+from here — it updates once `claude-dev` is pushed via the handoff. The "review the
+deployed preview" step therefore has to happen after that push lands; I've flagged this
+honestly rather than claiming a preview I can't produce. Local production build + Playwright
+QA stand in for as much of that verification as is possible without the deploy.
 
-## VERCEL
+## 15. STILL UNRESOLVED (genuine client blockers)
 
-This Cowork session cannot push directly to the repo (session-level git-proxy
-restriction), so the push goes through the `claude.ai/code` bundle handoff, same as
-Phase 2. The Vercel **Preview Deployment will update once `claude-dev` is pushed** there
-— it cannot be triggered or confirmed from this session. No promotion to `main`;
-visual review on the preview first, per the brief.
+1. **Business address** — the van-wrap candidate (14290 Tamiami Trail, North Port, FL
+   34287) is documented and centralized but **held as a candidate, not wired in**, per
+   your instruction. Footer shows service-area framing; schema emits no address. Needs
+   your explicit confirmation before it goes live (then it's a one-line change in
+   `business.ts`).
+2. **Real service pricing** — still a labeled draft; none supplied.
+3. **Verified reviews** — none retrievable; Reviews still links out to Google.
+4. **Shop / team photos** — none in any handoff; those slots keep the designed placeholder.
+5. **Team/owner headshots & storefront exterior** — would strengthen the LocalStory and
+   About sections when available.
