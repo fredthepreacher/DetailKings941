@@ -1,27 +1,28 @@
 import { Container } from "@/components/ui/Container";
 import { VideoMedia } from "@/components/media/VideoMedia";
+import { Reveal } from "@/components/ui/Reveal";
 import { processVideo } from "@/data/media";
 
 const STEPS = [
   {
     number: "01",
     title: "Tell Us About Your Vehicle",
-    description: "Share your vehicle's year, make, and model and what's going on with it.",
+    description: "Share your year, make, model, and what's going on with it. Two minutes, no phone tag.",
   },
   {
     number: "02",
-    title: "Choose What You Need",
-    description: "Pick a service — or let us recommend one based on your vehicle's condition.",
+    title: "Get Your Straight Quote",
+    description: "We scope the work to what your vehicle actually needs and give you a clear price — before anything starts.",
   },
   {
     number: "03",
-    title: "Get Your Detail",
-    description: "We do the work — hand-finished, start to finish, no shortcuts.",
+    title: "The King's Treatment",
+    description: "Hand-finished, stage by stage — wash, decontamination, correction, and protection. No tunnel brushes, no shortcuts.",
   },
   {
     number: "04",
-    title: "Enjoy The Finish",
-    description: "Drive away in a vehicle that looks (and feels) the way it did on day one.",
+    title: "Drive Away Crowned",
+    description: "A final walkthrough together, then you leave in a vehicle that looks the way it did on day one.",
   },
 ];
 
@@ -37,7 +38,7 @@ export function Process() {
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 via-transparent to-transparent" />
               <div className="grain-overlay" />
               <div className="absolute left-4 top-4 z-10">
-                <span className="edge-label text-white/90">The Process</span>
+                <span className="edge-label is-gold text-gold-400">The King&apos;s Treatment</span>
               </div>
               <div className="absolute bottom-4 left-4 z-10">
                 <p className="font-display text-sm font-semibold uppercase tracking-wide text-white">
@@ -46,20 +47,24 @@ export function Process() {
                 <p className="text-xs text-steel-300">Real client detail, in progress</p>
               </div>
             </div>
-            {/* Layered chrome frame accent */}
-            <div className="pointer-events-none absolute -bottom-3 -right-3 -z-0 h-full w-full rounded-2xl border border-lime-500/25" />
+            {/* Layered gold frame accent — premium emphasis */}
+            <div className="pointer-events-none absolute -bottom-3 -right-3 -z-0 h-full w-full rounded-2xl border border-gold-500/25" />
           </div>
 
-          {/* Steps */}
+          {/* Stages */}
           <div>
-            <span className="edge-label">How It Works</span>
+            <span className="edge-label is-gold">The Process</span>
             <h2 className="mt-4 max-w-lg font-display text-4xl font-bold uppercase leading-[0.95] tracking-tight text-white sm:text-5xl">
-              Simple, Start To Finish
+              The <span className="gold-text">King&apos;s</span> Treatment
             </h2>
-            <hr className="rule-chrome mt-8" />
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-steel-400">
+              Four stages, every vehicle, every time — the process that turns a
+              daily driver back into something you&apos;re proud to park.
+            </p>
+            <hr className="rule-gold mt-8" />
             <div className="mt-8 grid gap-x-10 gap-y-9 sm:grid-cols-2">
-              {STEPS.map((step) => (
-                <div key={step.number} className="relative">
+              {STEPS.map((step, i) => (
+                <Reveal key={step.number} delay={i * 90} className="relative">
                   <span className="ghost-type text-6xl">{step.number}</span>
                   <h3 className="mt-3 font-display text-lg font-semibold uppercase tracking-tight text-white">
                     {step.title}
@@ -67,7 +72,7 @@ export function Process() {
                   <p className="mt-2 text-sm leading-relaxed text-steel-400">
                     {step.description}
                   </p>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>

@@ -1,13 +1,14 @@
 import { Hero } from "@/components/home/Hero";
 import { TrustStrip } from "@/components/home/TrustStrip";
-import { ServicesPreview } from "@/components/home/ServicesPreview";
 import { Transformation } from "@/components/home/Transformation";
-import { Differentiators } from "@/components/home/Differentiators";
+import { ServiceSelector } from "@/components/home/ServiceSelector";
+import { Process } from "@/components/home/Process";
 import { ResultsReel } from "@/components/home/ResultsReel";
 import { Gallery } from "@/components/home/Gallery";
 import { LocalStory } from "@/components/home/LocalStory";
-import { Process } from "@/components/home/Process";
-import { Reviews } from "@/components/home/Reviews";
+import { Differentiators } from "@/components/home/Differentiators";
+import { ProofOfWork } from "@/components/home/ProofOfWork";
+import { BuildMyDetail } from "@/components/home/BuildMyDetail";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { localBusinessSchema, faqSchema } from "@/lib/schema";
@@ -28,17 +29,31 @@ export default function HomePage() {
           ),
         }}
       />
+      {/* 1 · Cinematic hero */}
       <Hero />
+      {/* 2 · Immediate trust strip */}
       <TrustStrip />
-      <ServicesPreview />
+      {/* 3 · Major before/after transformation — the core creative idea */}
       <Transformation />
-      <Differentiators />
-      <ResultsReel />
-      <Gallery />
-      <LocalStory />
+      {/* 4 · Visual service selector */}
+      <ServiceSelector />
+      {/* 5 · The King's Treatment process */}
       <Process />
-      <Reviews />
+      {/* 6 · Cinematic result — the Results Reel */}
+      <ResultsReel />
+      {/* 7 · Visual breath + trust reset — Real Work. Real Results. */}
+      <ProofOfWork />
+      {/* 8 · Optional exploration — curated gallery into the full portfolio */}
+      <Gallery />
+      {/* 9 · Florida vehicle-care problem / solution */}
+      <LocalStory />
+      {/* 10 · Proof-driven Why Detail Kings */}
+      <Differentiators />
+      {/* 11 · Build My Detail quote experience */}
+      <BuildMyDetail />
+      {/* 11 · FAQ */}
       <FAQSection />
+      {/* 12 · Cinematic final CTA */}
       <FinalCTA />
     </>
   );

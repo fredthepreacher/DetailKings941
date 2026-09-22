@@ -54,7 +54,7 @@ export function Hero() {
           <h1 className="max-w-4xl text-balance font-display text-6xl font-bold uppercase leading-[0.9] tracking-tight text-white sm:text-7xl lg:text-[8.5rem]">
             Your Car.
             <br />
-            <span className="chrome-text">Crowned.</span>
+            <span className="gold-text">Crowned.</span>
           </h1>
 
           <p className="mt-7 max-w-xl text-balance text-lg leading-relaxed text-steel-200 sm:text-xl">

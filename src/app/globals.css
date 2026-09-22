@@ -47,6 +47,15 @@
   --color-lime-600: #5bcf00;
   --color-lime-700: #3d9900;
 
+  /* Gold — the "King / premium" accent. Used sparingly for crown/premium
+     emphasis (never as a UI fill). Lime stays the interaction/transformation
+     accent; gold marks status and prestige. */
+  --color-gold-300: #f4d47a;
+  --color-gold-400: #e9bd52;
+  --color-gold-500: #d9a441;
+  --color-gold-600: #b9862c;
+  --color-gold-700: #8a621f;
+
   --color-chrome-a: #f8f8f8;
   --color-chrome-b: #b6b7ba;
   --color-chrome-c: #6c6d70;
@@ -78,6 +87,12 @@
   --color-lime-500: var(--color-lime-500);
   --color-lime-600: var(--color-lime-600);
   --color-lime-700: var(--color-lime-700);
+
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -156,6 +171,43 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Brushed-gold text for King / premium emphasis. */
+.gold-text {
+  background: linear-gradient(
+    115deg,
+    var(--color-gold-600) 0%,
+    var(--color-gold-300) 38%,
+    var(--color-gold-500) 58%,
+    var(--color-gold-300) 78%,
+    var(--color-gold-600) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* A hairline that fades gold at its center — for premium section rules. */
+.rule-gold {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-gold-600) 30%,
+    var(--color-gold-400) 50%,
+    var(--color-gold-600) 70%,
+    transparent 100%
+  );
+}
+
+/* Gold edge-label variant (King treatment markers). */
+.edge-label.is-gold {
+  color: var(--color-gold-400);
+}
+.edge-label.is-gold::before {
+  background: var(--color-gold-500);
 }
 
 .text-balance {

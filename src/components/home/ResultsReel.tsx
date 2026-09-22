@@ -11,7 +11,7 @@ const CAPTIONS = [
 
 export function ResultsReel() {
   return (
-    <section className="relative overflow-hidden bg-ink-900 py-24 sm:py-32">
+    <section className="relative overflow-hidden bg-ink-900 py-28 sm:py-44">
       {/* Oversized ghost word behind the reel */}
       <span
         aria-hidden
@@ -37,13 +37,13 @@ export function ResultsReel() {
           </Link>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
+        <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-6 sm:mt-20 sm:grid-cols-2 sm:gap-12">
           {resultVideos.map((asset, i) => (
             <figure
               key={asset.id}
               className={
                 i === 1
-                  ? "relative sm:mt-16" /* asymmetric offset on the second tile */
+                  ? "relative sm:mt-24" /* deeper asymmetric offset — more air */
                   : "relative"
               }
             >

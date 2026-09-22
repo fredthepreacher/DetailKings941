@@ -22,6 +22,10 @@ export function BeforeAfterSlider({
   const [dragging, setDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Reward moment: when the wipe is pushed to either extreme, the handle
+  // shifts from lime (interaction) to gold (completion/achievement).
+  const atFullReveal = position <= 3 || position >= 97;
+
   const updateFromClientX = useCallback((clientX: number) => {
     const el = containerRef.current;
     if (!el) return;
@@ -70,7 +74,10 @@ export function BeforeAfterSlider({
 
         {/* Handle */}
         <div
-          className="absolute inset-y-0 z-10 w-0.5 bg-white/90"
+          className={cn(
+            "absolute inset-y-0 z-10 w-0.5 transition-colors duration-300",
+            atFullReveal ? "bg-gold-400/90" : "bg-white/90",
+          )}
           style={{ left: `${position}%` }}
         >
           <div
@@ -84,7 +91,12 @@ export function BeforeAfterSlider({
               if (e.key === "ArrowLeft") setPosition((p) => Math.max(0, p - 5));
               if (e.key === "ArrowRight") setPosition((p) => Math.min(100, p + 5));
             }}
-            className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-ink-950 shadow-lg ring-4 ring-white/30 focus-visible:ring-lime-400"
+            className={cn(
+              "absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white shadow-lg ring-4 transition-all duration-300 focus-visible:ring-lime-400 motion-safe:duration-300",
+              atFullReveal
+                ? "text-gold-600 ring-gold-400/70 shadow-[0_0_24px_-2px_rgba(233,189,82,0.7)] motion-safe:scale-110"
+                : "text-ink-950 ring-white/30",
+            )}
           >
             <ChevronsLeftRight className="h-5 w-5" strokeWidth={2} />
           </div>
