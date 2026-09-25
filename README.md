@@ -54,8 +54,8 @@ verified color palette are live (see `src/data/media.ts` and
 ## Design system
 
 Tokens live in `src/app/globals.css` (`@theme`) — ink (near-black) / steel
-(neutral gray) / lime (brand green) / chrome color scale, Oswald (display) +
-Manrope (body) via self-hosted `@fontsource` packages (no external font
+(neutral gray) / lime (brand green) / chrome color scale, Bricolage Grotesque (display) +
+Hanken Grotesk (body) via self-hosted `@fontsource` packages (no external font
 requests). The palette is brand-verified, not invented: extracted directly
 from the client's real logo files and cross-checked against their
 `site.webmanifest` theme color — see

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, Check, ChevronLeft, ChevronRight, PartyPopper } from "lucide-react";
 import { services } from "@/data/services";
@@ -67,14 +67,26 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
       [key]: f[key].includes(value) ? f[key].filter((v) => v !== value) : [...f[key], value],
     }));
 
+  const contactErrors = validateContact(form);
+  const [showContactErrors, setShowContactErrors] = useState(false);
+  const uid = useId();
+
   const canAdvance = () => {
     if (step === 0) return form.year.trim() && form.make.trim() && form.model.trim() && form.vehicleType;
     if (step === 1) return form.serviceSlugs.length > 0;
-    if (step === 3) return form.name.trim() && form.phone.trim();
     return true;
   };
 
-  const next = () => canAdvance() && setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
+  const next = () => {
+    if (step === 3 && Object.keys(contactErrors).length > 0) {
+      // Explain instead of silently disabling: reveal errors, focus the first.
+      setShowContactErrors(true);
+      const first = (["name", "phone", "email"] as const).find((k) => contactErrors[k]);
+      if (first) document.getElementById(`${uid}-${first}`)?.focus();
+      return;
+    }
+    if (canAdvance()) setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
+  };
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
   const handleSubmit = () => {
@@ -147,8 +159,10 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
               <Field label="Year">
                 <input
                   inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
                   value={form.year}
-                  onChange={(e) => update("year", e.target.value)}
+                  onChange={(e) => update("year", e.target.value.replace(/\D/g, "").slice(0, 4))}
                   placeholder="2021"
                   className={inputClass}
                 />
@@ -271,31 +285,56 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
               <legend className="mb-1 font-display text-xl font-semibold uppercase tracking-tight text-white">
                 Contact Info
               </legend>
-              <Field label="Name">
+              <Field label="Name" htmlFor={`${uid}-name`} error={showContactErrors ? contactErrors.name : undefined}>
                 <input
+                  id={`${uid}-name`}
+                  name="name"
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
+                  onBlur={() => form.name && setShowContactErrors(true)}
                   className={inputClass}
                   autoComplete="name"
+                  autoCapitalize="words"
+                  enterKeyHint="next"
+                  required
+                  aria-required="true"
+                  {...errorProps(`${uid}-name`, showContactErrors && contactErrors.name)}
                 />
               </Field>
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Phone">
+                <Field label="Mobile Phone" htmlFor={`${uid}-phone`} error={showContactErrors ? contactErrors.phone : undefined}>
                   <input
+                    id={`${uid}-phone`}
+                    name="tel"
                     type="tel"
+                    inputMode="tel"
                     value={form.phone}
                     onChange={(e) => update("phone", e.target.value)}
+                    onBlur={() => form.phone && setShowContactErrors(true)}
+                    placeholder="(941) 555-0123"
                     className={inputClass}
                     autoComplete="tel"
+                    enterKeyHint="next"
+                    required
+                    aria-required="true"
+                    {...errorProps(`${uid}-phone`, showContactErrors && contactErrors.phone)}
                   />
                 </Field>
-                <Field label="Email (optional)">
+                <Field label="Email (optional)" htmlFor={`${uid}-email`} error={showContactErrors ? contactErrors.email : undefined}>
                   <input
+                    id={`${uid}-email`}
+                    name="email"
                     type="email"
+                    inputMode="email"
                     value={form.email}
                     onChange={(e) => update("email", e.target.value)}
+                    onBlur={() => form.email && setShowContactErrors(true)}
                     className={inputClass}
                     autoComplete="email"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                    enterKeyHint="done"
+                    {...errorProps(`${uid}-email`, showContactErrors && contactErrors.email)}
                   />
                 </Field>
               </div>
@@ -359,16 +398,68 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
 }
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-ink-950 px-4 py-3 text-sm text-white placeholder:text-steel-600 outline-none transition-colors focus:border-lime-500";
+  "w-full rounded-xl border border-white/15 bg-ink-950 px-4 py-3 text-sm text-white placeholder:text-steel-600 outline-none transition-colors focus:border-lime-500 aria-[invalid=true]:border-red-400/70";
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+// US mobile numbers: 10 digits, optionally prefixed with country code 1.
+function isValidUsPhone(value: string) {
+  const digits = value.replace(/\D/g, "");
+  return digits.length === 10 || (digits.length === 11 && digits.startsWith("1"));
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function validateContact(form: FormState) {
+  const errors: Partial<Record<"name" | "phone" | "email", string>> = {};
+  if (form.name.trim().length < 2) errors.name = "Please enter your name.";
+  if (!form.phone.trim()) errors.phone = "A mobile number is required so we can send your quote.";
+  else if (!isValidUsPhone(form.phone)) errors.phone = "Enter a 10-digit US phone number.";
+  if (form.email.trim() && !EMAIL_RE.test(form.email.trim())) {
+    errors.email = "That email doesn't look right — or leave it blank.";
+  }
+  return errors;
+}
+
+function errorProps(id: string, error: string | false | undefined) {
+  return error
+    ? { "aria-invalid": true as const, "aria-describedby": `${id}-error` }
+    : {};
+}
+
+function Field({
+  label,
+  htmlFor,
+  error,
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  // With htmlFor the label is explicitly paired (needed once an error message
+  // sits beside the input); without it, the wrapping label still associates.
+  const Wrapper = htmlFor ? "div" : "label";
   return (
-    <label className="block">
-      <span className="mb-1.5 block font-display text-xs font-semibold uppercase tracking-wide text-steel-400">
-        {label}
-      </span>
+    <Wrapper className="block">
+      {htmlFor ? (
+        <label
+          htmlFor={htmlFor}
+          className="mb-1.5 block font-display text-xs font-semibold uppercase tracking-wide text-steel-400"
+        >
+          {label}
+        </label>
+      ) : (
+        <span className="mb-1.5 block font-display text-xs font-semibold uppercase tracking-wide text-steel-400">
+          {label}
+        </span>
+      )}
       {children}
-    </label>
+      {error && htmlFor && (
+        <p id={`${htmlFor}-error`} role="alert" className="mt-1.5 text-xs text-red-400">
+          {error}
+        </p>
+      )}
+    </Wrapper>
   );
 }
 

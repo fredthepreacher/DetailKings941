@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { CinematicLink } from "@/components/cinematic/CinematicLink";
 import { ArrowRight, CalendarCheck, HandCoins, Phone, ShieldCheck } from "lucide-react";
 import { services } from "@/data/services";
 import { business } from "@/data/business";
@@ -49,13 +49,14 @@ export function BuildMyDetail() {
             </ul>
 
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Link
-                href="/contact"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-lime-500 px-8 font-display text-base font-semibold uppercase tracking-wide text-ink-950 shadow-[0_10px_30px_-8px_rgba(124,255,0,0.6)] transition-all hover:bg-lime-400"
+              <CinematicLink
+                tone="lime"
+                label="Start My Quote"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-lime-500 px-8 font-display text-base font-semibold uppercase tracking-wide text-ink-950 shadow-[0_10px_30px_-8px_rgba(124,255,0,0.6)] transition-all duration-150 hover:bg-lime-400 active:scale-[0.97]"
               >
                 Start My Quote
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </CinematicLink>
               <a
                 href={`tel:${business.phone.e164}`}
                 className="inline-flex items-center gap-2 font-display text-base font-semibold text-white transition-colors hover:text-lime-400"
@@ -76,10 +77,12 @@ export function BuildMyDetail() {
             </p>
             <div className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {services.map((s) => (
-                <Link
+                <CinematicLink
                   key={s.slug}
-                  href={`/contact?service=${s.slug}`}
-                  className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 transition-all hover:border-lime-500/40 hover:bg-lime-500/[0.06]"
+                  service={s.slug}
+                  label={s.name}
+                  icon={s.icon}
+                  className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 transition-all duration-150 hover:border-lime-500/40 hover:bg-lime-500/[0.06] active:scale-[0.98] active:border-lime-500/60"
                 >
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5 text-steel-300 transition-colors group-hover:bg-lime-500 group-hover:text-ink-950">
                     <DynamicIcon name={s.icon} className="h-4 w-4" strokeWidth={1.75} />
@@ -88,7 +91,7 @@ export function BuildMyDetail() {
                     {s.name}
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0 text-steel-600 transition-all group-hover:translate-x-0.5 group-hover:text-lime-400" />
-                </Link>
+                </CinematicLink>
               ))}
             </div>
           </Reveal>

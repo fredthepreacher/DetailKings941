@@ -124,6 +124,18 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keeps the scrollbar's space reserved when the cinematic layer locks
+     scrolling, so the page underneath never shifts sideways. */
+  scrollbar-gutter: stable;
+}
+
+/* Faint technical grid for the cinematic environment layer. */
+.cinematic-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black, transparent 75%);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -8,7 +8,7 @@ import { business } from "@/data/business";
  */
 export function MobileActionBar() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-ink-950/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] lg:hidden">
+    <div data-cinematic-recede="" className="fixed inset-x-0 bottom-0 z-40 flex border-t border-white/10 bg-ink-950/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] lg:hidden">
       <a
         href={`tel:${business.phone.e164}`}
         className="flex flex-1 items-center justify-center gap-2 border-r border-white/10 py-3.5 font-display text-sm font-semibold uppercase tracking-wide text-white active:bg-white/5"

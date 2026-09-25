@@ -39,6 +39,7 @@ export function Header() {
 
   return (
     <header
+      data-cinematic-recede=""
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled || menuOpen

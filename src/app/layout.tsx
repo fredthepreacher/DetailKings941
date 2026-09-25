@@ -5,6 +5,9 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileActionBar } from "@/components/layout/MobileActionBar";
 import { websiteSchema } from "@/lib/schema";
 import { SITE_URL } from "@/lib/schema";
+import { MotionProvider } from "@/components/providers/MotionProvider";
+import { CinematicHost } from "@/components/cinematic/CinematicHost";
+import { CINEMATIC_ENABLED } from "@/lib/cinematic/flag";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -54,18 +57,27 @@ export const viewport: Viewport = {
   themeColor: "#7CFF00",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children, cinema }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full">
+    // data-scroll-behavior: lets Next suspend smooth scrolling during route
+    // changes so navigation never animates the page scroll.
+    <html lang="en" className="h-full" data-scroll-behavior="smooth">
       <body className="flex min-h-full flex-col font-body">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
         />
-        <Header />
-        <main className="flex-1 pb-16 lg:pb-0">{children}</main>
-        <Footer />
-        <MobileActionBar />
+        <MotionProvider>
+          <Header />
+          {/* The "stage": the live page the cinematic camera dollies into. */}
+          <div data-cinematic-stage="" className="flex flex-1 flex-col">
+            <main className="flex-1 pb-16 lg:pb-0">{children}</main>
+            <Footer />
+          </div>
+          <MobileActionBar />
+          {CINEMATIC_ENABLED && <CinematicHost />}
+          {cinema}
+        </MotionProvider>
       </body>
     </html>
   );
