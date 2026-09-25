@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Camera, Check, ChevronLeft, ChevronRight, PartyPopper } from "lucide-react";
+import { Camera, Check, ChevronLeft, ChevronRight, Loader2, PartyPopper } from "lucide-react";
 import { services } from "@/data/services";
 import { business } from "@/data/business";
 import { Button } from "@/components/ui/Button";
@@ -49,14 +49,85 @@ const initialState: FormState = {
 
 const STEP_LABELS = ["Vehicle", "Services", "Condition", "Contact", "Review"];
 const TOTAL_STEPS = STEP_LABELS.length;
+const CONTACT_STEP = 3;
+const REVIEW_STEP = 4;
 
-export function QuoteFlow({ preselectedService }: { preselectedService?: string }) {
-  const [step, setStep] = useState(0);
+const emailOk = (v: string) => v.trim() === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const phoneOk = (v: string) => v.replace(/\D/g, "").length >= 7;
+const nameOk = (v: string) => v.trim().length > 0;
+
+export function QuoteFlow({
+  preselectedService,
+  variant = "page",
+  persistKey,
+  onDone,
+}: {
+  preselectedService?: string;
+  variant?: "page" | "cinematic";
+  /** When set, partial input survives closing/re-opening (sessionStorage). */
+  persistKey?: string;
+  /** Optional "done" affordance shown on the success screen (e.g. close overlay). */
+  onDone?: () => void;
+}) {
+  const storageKey = persistKey ? `dk:quote:${persistKey}` : null;
+
+  const [step, setStep] = useState<number>(() => {
+    if (!storageKey || typeof window === "undefined") return 0;
+    try {
+      const raw = window.sessionStorage.getItem(storageKey);
+      if (raw) {
+        const s = (JSON.parse(raw) as { step?: number }).step;
+        if (typeof s === "number") return Math.min(Math.max(s, 0), TOTAL_STEPS - 1);
+      }
+    } catch {
+      /* ignore */
+    }
+    return 0;
+  });
+
+  const [form, setForm] = useState<FormState>(() => {
+    const base: FormState = {
+      ...initialState,
+      serviceSlugs: preselectedService ? [preselectedService] : [],
+    };
+    if (!storageKey || typeof window === "undefined") return base;
+    try {
+      const raw = window.sessionStorage.getItem(storageKey);
+      if (!raw) return base;
+      const saved = (JSON.parse(raw) as { form?: Partial<FormState> }).form ?? {};
+      const merged: FormState = { ...base, ...saved };
+      if (preselectedService && !merged.serviceSlugs.includes(preselectedService)) {
+        merged.serviceSlugs = [preselectedService, ...merged.serviceSlugs];
+      }
+      return merged;
+    } catch {
+      return base;
+    }
+  });
+
+  const [showErrors, setShowErrors] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState<FormState>(() => ({
-    ...initialState,
-    serviceSlugs: preselectedService ? [preselectedService] : [],
-  }));
+
+  // Persist partial input so exiting and re-entering keeps the visitor's work.
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ form, step }));
+    } catch {
+      /* ignore quota / private mode */
+    }
+  }, [form, step, storageKey]);
+
+  const clearDraft = () => {
+    if (!storageKey) return;
+    try {
+      window.sessionStorage.removeItem(storageKey);
+    } catch {
+      /* ignore */
+    }
+  };
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -67,48 +138,106 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
       [key]: f[key].includes(value) ? f[key].filter((v) => v !== value) : [...f[key], value],
     }));
 
+  const contactValid = nameOk(form.name) && phoneOk(form.phone) && emailOk(form.email);
+
   const canAdvance = () => {
-    if (step === 0) return form.year.trim() && form.make.trim() && form.model.trim() && form.vehicleType;
+    if (step === 0)
+      return Boolean(form.year.trim() && form.make.trim() && form.model.trim() && form.vehicleType);
     if (step === 1) return form.serviceSlugs.length > 0;
-    if (step === 3) return form.name.trim() && form.phone.trim();
+    if (step === CONTACT_STEP) return contactValid;
     return true;
   };
 
-  const next = () => canAdvance() && setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
+  const next = () => {
+    if (!canAdvance()) {
+      if (step === CONTACT_STEP) setShowErrors(true);
+      return;
+    }
+    setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
+  };
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
-  const handleSubmit = () => {
-    // NOTE: no third-party form backend has been wired up per instruction
-    // ("do not connect random third-party services without instruction").
-    // This is the interaction architecture only — swap this handler for a
-    // real submission (API route, email service, CRM webhook) once Fred
-    // decides how leads should land.
-    setSubmitted(true);
+  // "Skip — I'll add it at the end": jump past contact; it's required to submit,
+  // so Review will prompt for it there.
+  const skipContact = () => setStep(REVIEW_STEP);
+
+  const handleSubmit = async () => {
+    if (!contactValid) {
+      setShowErrors(true);
+      setStep(CONTACT_STEP);
+      return;
+    }
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          year: form.year,
+          make: form.make,
+          model: form.model,
+          vehicleType: form.vehicleType,
+          serviceSlugs: form.serviceSlugs,
+          conditions: form.conditions,
+          notes: form.notes,
+          source: variant === "cinematic" ? "build-my-detail" : "contact-page",
+        }),
+      });
+      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+      if (!res.ok || !data?.ok) {
+        setSubmitError("We couldn't send your request just now. Please try again or call us.");
+        return;
+      }
+      clearDraft();
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Network error — check your connection and try again, or give us a call.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const wrapperClass =
+    variant === "cinematic" ? "" : "rounded-3xl border border-white/10 bg-ink-900 p-6 sm:p-10";
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center rounded-3xl border border-white/10 bg-ink-900 px-8 py-16 text-center">
-        <PartyPopper className="h-9 w-9 text-lime-500" />
-        <h2 className="mt-5 font-display text-2xl font-semibold uppercase tracking-tight text-white sm:text-3xl">
-          Request Received
-        </h2>
-        <p className="mt-3 max-w-md text-steel-400">
-          Thanks, {form.name.split(" ")[0] || "there"} — we&apos;ll follow up shortly with pricing for
-          your {form.year} {form.make} {form.model}. Need it faster?
-        </p>
-        <a
-          href={`tel:${business.phone.e164}`}
-          className="mt-6 font-display text-lg font-semibold text-lime-400 hover:text-lime-300"
-        >
-          Call {business.phone.display}
-        </a>
+      <div className={cn(variant === "cinematic" ? "" : wrapperClass)}>
+        <div className="flex flex-col items-center rounded-3xl border border-white/10 bg-ink-900 px-8 py-16 text-center">
+          <PartyPopper className="h-9 w-9 text-lime-500" />
+          <h2 className="mt-5 font-display text-2xl font-semibold uppercase tracking-tight text-white sm:text-3xl">
+            Request Received
+          </h2>
+          <p className="mt-3 max-w-md text-steel-400">
+            Thanks, {form.name.split(" ")[0] || "there"} — we&apos;ll follow up shortly with pricing
+            for your {form.year} {form.make} {form.model}. Need it faster?
+          </p>
+          <a
+            href={`tel:${business.phone.e164}`}
+            className="mt-6 font-display text-lg font-semibold text-lime-400 hover:text-lime-300"
+          >
+            Call {business.phone.display}
+          </a>
+          {onDone && (
+            <button
+              type="button"
+              onClick={onDone}
+              className="mt-8 font-display text-sm font-semibold uppercase tracking-wide text-steel-400 transition-colors hover:text-white"
+            >
+              Done
+            </button>
+          )}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-ink-900 p-6 sm:p-10">
+    <div className={wrapperClass}>
       {/* Progress */}
       <div className="mb-10 flex items-center gap-2">
         {STEP_LABELS.map((label, i) => (
@@ -147,6 +276,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
               <Field label="Year">
                 <input
                   inputMode="numeric"
+                  autoComplete="off"
                   value={form.year}
                   onChange={(e) => update("year", e.target.value)}
                   placeholder="2021"
@@ -158,6 +288,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                   value={form.make}
                   onChange={(e) => update("make", e.target.value)}
                   placeholder="Toyota"
+                  autoCapitalize="words"
                   className={inputClass}
                 />
               </Field>
@@ -166,6 +297,7 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                   value={form.model}
                   onChange={(e) => update("model", e.target.value)}
                   placeholder="Tacoma"
+                  autoCapitalize="words"
                   className={inputClass}
                 />
               </Field>
@@ -271,33 +403,60 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
               <legend className="mb-1 font-display text-xl font-semibold uppercase tracking-tight text-white">
                 Contact Info
               </legend>
-              <Field label="Name">
+              <Field
+                label="Name"
+                error={showErrors && !nameOk(form.name) ? "Please enter your name." : undefined}
+              >
                 <input
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
                   className={inputClass}
                   autoComplete="name"
+                  autoCapitalize="words"
+                  required
+                  aria-required="true"
                 />
               </Field>
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Phone">
+                <Field
+                  label="Phone"
+                  error={showErrors && !phoneOk(form.phone) ? "Enter a valid phone number." : undefined}
+                >
                   <input
                     type="tel"
+                    inputMode="tel"
                     value={form.phone}
                     onChange={(e) => update("phone", e.target.value)}
                     className={inputClass}
                     autoComplete="tel"
+                    placeholder="(941) 555-0123"
+                    required
+                    aria-required="true"
                   />
                 </Field>
-                <Field label="Email (optional)">
+                <Field
+                  label="Email (optional)"
+                  error={showErrors && !emailOk(form.email) ? "Enter a valid email or leave blank." : undefined}
+                >
                   <input
                     type="email"
+                    inputMode="email"
                     value={form.email}
                     onChange={(e) => update("email", e.target.value)}
                     className={inputClass}
                     autoComplete="email"
+                    placeholder="you@example.com"
                   />
                 </Field>
+              </div>
+              <div className="flex justify-start">
+                <button
+                  type="button"
+                  onClick={skipContact}
+                  className="font-display text-xs font-semibold uppercase tracking-wide text-steel-400 underline decoration-white/20 underline-offset-4 transition-colors hover:text-white"
+                >
+                  Skip — I&apos;ll add it at the end
+                </button>
               </div>
               <label className="flex items-start gap-3 rounded-xl border border-dashed border-white/15 px-4 py-3.5 text-sm text-steel-400">
                 <Camera className="mt-0.5 h-4 w-4 shrink-0 text-steel-500" />
@@ -325,8 +484,39 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
                   }
                 />
                 <ReviewRow label="Condition notes" value={[...form.conditions, form.notes].filter(Boolean).join(", ") || "—"} />
-                <ReviewRow label="Contact" value={`${form.name} · ${form.phone}${form.email ? ` · ${form.email}` : ""}`} />
+                <ReviewRow
+                  label="Contact"
+                  value={
+                    contactValid
+                      ? `${form.name} · ${form.phone}${form.email ? ` · ${form.email}` : ""}`
+                      : "Not added yet"
+                  }
+                />
               </dl>
+
+              {!contactValid && (
+                <div className="mt-6 flex flex-col gap-3 rounded-xl border border-gold-500/30 bg-gold-500/[0.06] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-steel-200">
+                    Add your name and phone so we can send your quote.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowErrors(true);
+                      setStep(CONTACT_STEP);
+                    }}
+                    className="shrink-0 font-display text-xs font-semibold uppercase tracking-wide text-gold-300 underline underline-offset-4 hover:text-gold-200"
+                  >
+                    Add contact info
+                  </button>
+                </div>
+              )}
+
+              {submitError && (
+                <p role="alert" className="mt-5 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {submitError}
+                </p>
+              )}
             </div>
           )}
         </motion.div>
@@ -349,8 +539,15 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
             <ChevronRight className="h-4 w-4" />
           </Button>
         ) : (
-          <Button type="button" onClick={handleSubmit}>
-            Submit Request
+          <Button type="button" onClick={handleSubmit} disabled={submitting || !contactValid}>
+            {submitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Sending…
+              </>
+            ) : (
+              "Submit Request"
+            )}
           </Button>
         )}
       </div>
@@ -361,13 +558,22 @@ export function QuoteFlow({ preselectedService }: { preselectedService?: string 
 const inputClass =
   "w-full rounded-xl border border-white/15 bg-ink-950 px-4 py-3 text-sm text-white placeholder:text-steel-600 outline-none transition-colors focus:border-lime-500";
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
       <span className="mb-1.5 block font-display text-xs font-semibold uppercase tracking-wide text-steel-400">
         {label}
       </span>
       {children}
+      {error && <span className="mt-1.5 block text-xs font-medium text-red-300">{error}</span>}
     </label>
   );
 }

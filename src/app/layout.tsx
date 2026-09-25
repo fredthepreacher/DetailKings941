@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileActionBar } from "@/components/layout/MobileActionBar";
+import { CinematicProvider } from "@/components/cinematic/CinematicContext";
 import { websiteSchema } from "@/lib/schema";
 import { SITE_URL } from "@/lib/schema";
 
@@ -57,15 +58,22 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full">
-      <body className="flex min-h-full flex-col font-body">
+      <body className="min-h-full font-body">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
         />
-        <Header />
-        <main className="flex-1 pb-16 lg:pb-0">{children}</main>
-        <Footer />
-        <MobileActionBar />
+        <CinematicProvider>
+          <Header />
+          {/* Normal-flow content only — the cinematic "recede" transform is
+              applied here, never around the fixed chrome (Header / MobileActionBar),
+              to avoid the position:fixed + transformed-ancestor jump. */}
+          <div data-cinematic-recede className="flex flex-1 flex-col">
+            <main className="flex-1 pb-16 lg:pb-0">{children}</main>
+            <Footer />
+          </div>
+          <MobileActionBar />
+        </CinematicProvider>
       </body>
     </html>
   );
