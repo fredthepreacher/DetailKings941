@@ -187,9 +187,15 @@ export function QuoteFlow({
           source: variant === "cinematic" ? "build-my-detail" : "contact-page",
         }),
       });
-      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; delivered?: boolean } | null;
       if (!res.ok || !data?.ok) {
         setSubmitError("We couldn't send your request just now. Please try again or call us.");
+        return;
+      }
+      // A 200 response means the API accepted the request, not necessarily
+      // that it reached the business. Never show success for the demo fallback.
+      if (!data.delivered) {
+        setSubmitError("Online quote delivery isn't active yet. Please call us to request a quote.");
         return;
       }
       clearDraft();
